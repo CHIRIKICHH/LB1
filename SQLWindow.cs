@@ -25,7 +25,7 @@ namespace LB1
             try
             {
 
-                var cs = "Host=217.19.212.166;Port=5454;Database=LB1;Username=admin;Password=admin";
+                var cs = "Host=mine.chirikichh.ru;Port=5454;Database=LB1;Username=admin;Password=admin";
 
                 using var con = new NpgsqlConnection(cs);
                 con.Open();
