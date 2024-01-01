@@ -16,7 +16,7 @@ namespace LB1
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=192.168.30.5;Port=5454;Database=LB1;Username=admin;Password=admin");
+            optionsBuilder.UseNpgsql("Host=mine.chirikichh.ru;Port=5454;Database=LB1;Username=admin;Password=admin");
         }
     }
 }

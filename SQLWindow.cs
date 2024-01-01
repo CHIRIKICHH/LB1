@@ -1,5 +1,6 @@
 ﻿using LB1.Models;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,46 +24,34 @@ namespace LB1
         {
             try
             {
-                using (var context = new ApplicationContext())
+
+                var cs = "Host=217.19.212.166;Port=5454;Database=LB1;Username=admin;Password=admin";
+
+                using var con = new NpgsqlConnection(cs);
+                con.Open();
+
+                var sql = textBox1.Text;
+                using var cmd = new NpgsqlCommand(sql, con);
+
+                if (radioButton1.Checked)
                 {
-                    if (radioButton1.Checked)
-                    {
-                        if (textBox1.Text.Contains("Orders"))
-                        {
-                            dataGridView1.DataSource = context.Orders.FromSqlRaw($"{textBox1.Text}").Include(x => x.Product).Include(x => x.Client).ToList();
-                        }
-                        else if (textBox1.Text.Contains("Clients"))
-                        {
-                            dataGridView1.DataSource = context.Clients.FromSqlRaw($"{textBox1.Text}").ToList();
-                        }
-                        else if (textBox1.Text.Contains("Products"))
-                        {
-                            dataGridView1.DataSource = context.Products.FromSqlRaw($"{textBox1.Text}").ToList();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Table does not exist!", "Error");
-                        }
-                    }
-                    else
-                    {
-                        string text = context.Database.ExecuteSqlRaw($"{textBox1.Text}").ToString();
-                        if(text == "1")
-                        {
-                            textBox2.Text = "Success";
-                        }
-                        else
-                        {
-                            textBox2.Text = text;
-                        }
-                    }
+                    using NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    string name = "";
+                    DataTable dt = new DataTable();
+                    dt.Load(rdr);
+                    dataGridView1.DataSource = dt;
                 }
-        }
+                else
+                {
+                    string text = cmd.ExecuteNonQuery().ToString();
+                    textBox2.Text = text;
+                }
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "error");
             }
-}
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
