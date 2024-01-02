@@ -44,7 +44,14 @@ namespace LB1
                 else
                 {
                     string text = cmd.ExecuteNonQuery().ToString();
-                    textBox2.Text = text;
+                    if(text == "1")
+                    {
+                    textBox2.Text = "Done";
+                    }
+                    else
+                    {
+                        textBox2.Text = "Not completed";
+                    }
                 }
             }
             catch (Exception ex)
